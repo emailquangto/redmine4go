@@ -1,29 +1,21 @@
-redmine4go
---------
+Redmine API in Go [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) [![test](https://github.com/emailquangto/redmine4go/workflows/test/badge.svg?branch=master)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3Atest) [![lint](https://github.com/emailquangto/redmine4go/workflows/lint/badge.svg?branch=master)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3A%22lint%22)
+[![codecov](https://codecov.io/gh/emailquangto/redmine4go/branch/master/graph/badge.svg)](https://codecov.io/gh/emailquangto/redmine4go)
+===============
+
+This library supports most if not all of the `Redmine` REST calls.
 
 
-redmine4go is a Go client library for accessing the [Redmine](https://www.redmine.org/projects/redmine/wiki/Rest_api/) API
+## Installation
 
-**travis-ci:** [![Build Status](https://travis-ci.org/emailquangto/redmine4go.svg?branch=master)](https://travis-ci.org/emailquangto/redmine4go)
+### *go get*
 
-**GoDoc:** [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go)
+    $ go get -u github.com/emailquangto/redmine4go
 
-**Test Coverage:** xx%
+## Example
 
+### Get issues of a Redmine project
 
-References
-----------
-
-[https://godoc.org/github.com/emailquangto/redmine4go](https://godoc.org/github.com/emailquangto/redmine4go)
-
-
-Example usage
--------------
-
-The following is how to get issues of a project.
-See more samples under _examples_ folder.
-
-```
+```go
 package main
 
 import (
@@ -50,8 +42,9 @@ func main() {
 }
 ```
 
+### See more examples under _examples_ folder.
 
-License
--------
 
-MIT
+## License
+
+[MIT License](https://github.com/emailquangto/redmine4go/blob/master/LICENSE)
