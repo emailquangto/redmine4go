@@ -13,8 +13,12 @@ func main() {
 
 	baseURL := os.Getenv("BASE_URL")
 	apiKey := os.Getenv("API_KEY")
+	apiFormat := os.Getenv("API_FORMAT")
 	projectId := os.Getenv("PROJECT_ID")
 
-	response := redmine4go.GetIssuesOfProject(baseURL, apiKey, projectId)
-	fmt.Println(response)
+	c := redmine4go.CreateClient(baseURL, apiKey, apiFormat)
+	resp, err := c.GetIssuesOfProject(projectId)
+	if err == nil {
+		fmt.Println(resp)
+	}
 }
