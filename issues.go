@@ -5,6 +5,9 @@ import (
 	"net/http"
 )
 
+// GetIssuesOfProject returns a list of issues
+// in a project
+// for the default settings (parameters)
 func (c *Client) GetIssuesOfProject(projectId string) (string, error) {
 
 	req, err := http.NewRequest(http.MethodGet, c.url+"/issues."+c.format+"?project_id="+projectId, nil)
@@ -31,4 +34,29 @@ func (c *Client) GetIssuesOfProject(projectId string) (string, error) {
 	}
 
 	return string(bodyContent), nil
+}
+
+// An Issue stores the issue information
+type Issue struct {
+	id               int
+	project_id       int
+	project_name     string
+	tracker          string
+	status           string
+	priority         string
+	author_id        int
+	author_name      string
+	assigned_to_id   int
+	assigned_to_name string
+	parent           int
+	subject          string
+	description      string
+	start_date       string
+	due_date         string
+	done_ratio       int
+	is_private       bool
+	estimated_hours  float32
+	created_on       string
+	updated_on       string
+	closed_on        string
 }
