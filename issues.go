@@ -39,9 +39,9 @@ func (c *Client) GetIssueListOfProject(projectId string) (IssueList, error) {
 	if err != nil {
 		return issueList, err
 	}
-	json.Unmarshal([]byte(bodyContent), &issueList)
+	err = json.Unmarshal([]byte(bodyContent), &issueList)
 
-	return issueList, nil
+	return issueList, err
 }
 
 // GetIssuesOfProject() returns a list of issues only
@@ -55,7 +55,9 @@ func (c *Client) GetIssuesOfProject(projectId string) ([]Issue, error) {
 	if err != nil {
 		return issues, err
 	}
-	return issueList.Issues, err
+	issues = issueList.Issues
+
+	return issues, err
 }
 
 type IssueList struct {
