@@ -26,7 +26,7 @@ func (c *Client) GetIssueListOfProjectXML(projectId string) (IssueListXML, error
 	if err != nil {
 		return issueList, err
 	}
-	//defer resp.Body.Close()
+	defer resp.Body.Close()
 
 	// return error if status code is not OK
 	if resp.StatusCode >= http.StatusBadRequest {
