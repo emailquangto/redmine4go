@@ -7,6 +7,43 @@ import (
 	"time"
 )
 
+// GetIssueListOfProjectWithParameters() returns a raw list of issues (including value of total count, offset, limit)
+// in a project
+// for the default settings (parameters) from protocol scheme JSON
+func (c *Client) GetIssueListOfProjectWithParameters(projectId string) (IssueList, error) {
+	// variable to store return value
+	issueList := IssueList{}
+
+	// set up request
+	req, err := http.NewRequest(http.MethodGet, c.url+"/issues."+c.format+"?project_id="+projectId, nil)
+	if err != nil {
+		return issueList, err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return issueList, err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return issueList, err
+	}
+
+	// parse the response's body
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return issueList, err
+	}
+	err = json.Unmarshal([]byte(bodyContent), &issueList)
+
+	return issueList, err
+}
+
 // GetIssueListOfProject() returns a raw list of issues (including value of total count, offset, limit)
 // in a project
 // for the default settings (parameters) from protocol scheme JSON
