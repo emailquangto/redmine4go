@@ -1,5 +1,4 @@
 # Redmine API in Go
-  -----------------
 
 This library supports most if not all of the `Redmine` REST calls.
 
@@ -8,7 +7,6 @@ This library supports most if not all of the `Redmine` REST calls.
 
 
 ## Installation
-   ------------
 
 ### *go get*
 
