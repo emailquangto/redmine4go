@@ -9,7 +9,7 @@ import (
 
 // GetIssueListOfProject() returns a raw list of issues (including value of total count, offset, limit)
 // in a project
-// for the default settings (parameters)
+// for the default settings (parameters) from protocol scheme JSON
 func (c *Client) GetIssueListOfProject(projectId string) (IssueList, error) {
 	// variable to store return value
 	issueList := IssueList{}
@@ -46,7 +46,7 @@ func (c *Client) GetIssueListOfProject(projectId string) (IssueList, error) {
 
 // GetIssuesOfProject() returns a list of issues only
 // in a project
-// for the default settings (parameters)
+// for the default settings (parameters) from protocol scheme JSON
 func (c *Client) GetIssuesOfProject(projectId string) ([]Issue, error) {
 	// variable to store return value
 	issues := []Issue{}

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	godotenv.Load(".env")
+	godotenv.Load("../.env-json")
 
 	baseURL := os.Getenv("BASE_URL")
 	apiKey := os.Getenv("API_KEY")
@@ -18,8 +18,8 @@ func main() {
 
 	c := redmine4go.CreateClient(baseURL, apiKey, apiFormat)
 
-	issueList, err := c.GetIssueListOfProject(projectId)
-	if err == nil {
+	issueList, error := c.GetIssueListOfProject(projectId)
+	if error == nil {
 		fmt.Printf("Number of issues = %d\n", issueList.TotalCount)
 		fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
 		fmt.Printf("issue 1 - ID = %d\n", issueList.Issues[0].ID)
@@ -27,12 +27,14 @@ func main() {
 		fmt.Printf("issue 1 - Status = %s\n", issueList.Issues[0].Status.Name)
 		fmt.Printf("issue 1 - Author = %s\n", issueList.Issues[0].Author.Name)
 		fmt.Printf("issue 1 - Assigned To = %s\n", issueList.Issues[0].AssignedTo.Name)
+	} else {
+		fmt.Printf("%s\n", error)
 	}
 
 	fmt.Printf("%s\n", "=====*****=====")
 
-	issues, err := c.GetIssuesOfProject(projectId)
-	if err == nil {
+	issues, error := c.GetIssuesOfProject(projectId)
+	if error == nil {
 		fmt.Printf("Number of issues = %d\n", len(issues))
 		fmt.Printf("issue 1 - Project = %s\n", issues[0].Project.Name)
 		fmt.Printf("issue 1 - ID = %d\n", issues[0].ID)
@@ -40,5 +42,7 @@ func main() {
 		fmt.Printf("issue 1 - Status = %s\n", issues[0].Status.Name)
 		fmt.Printf("issue 1 - Author = %s\n", issues[0].Author.Name)
 		fmt.Printf("issue 1 - Assigned To = %s\n", issues[0].AssignedTo.Name)
+	} else {
+		fmt.Printf("%s\n", error)
 	}
 }

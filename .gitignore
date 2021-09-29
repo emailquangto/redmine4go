@@ -6,7 +6,7 @@
 *.dylib
 
 # environment file
-.env
+.env*
 
 # Test binary, built with `go test -c`
 *.test
@@ -16,6 +16,10 @@
 
 #temp file
 .DS_Store
+
+#unit test
+unit-test/
+unit-test.go
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
