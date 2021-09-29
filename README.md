@@ -1,17 +1,22 @@
-Redmine API in Go [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) [![lint](https://github.com/emailquangto/redmine4go/workflows/golangci-lint/badge.svg?branch=main)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3A%22golangci-lint%22)
-
-===============
+# Redmine API in Go
+  -----------------
 
 This library supports most if not all of the `Redmine` REST calls.
 
+[![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) 
+[![lint](https://github.com/emailquangto/redmine4go/workflows/golangci-lint/badge.svg?branch=main)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3A%22golangci-lint%22)
+
 
 ## Installation
+   ------------
 
 ### *go get*
 
     $ go get -u github.com/emailquangto/redmine4go
 
+
 ## Example
+   -------
 
 ### Get issues of a Redmine project using protocol scheme **JSON**
 
@@ -123,5 +128,6 @@ func main() {
 
 
 ## License
+   -------
 
 [MIT License](https://github.com/emailquangto/redmine4go/blob/master/LICENSE)
