@@ -1,4 +1,4 @@
-Redmine API in Go [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) [![lint](https://github.com/emailquangto/redmine4go/workflows/golangci-lint/badge.svg?branch=main)](https://github.com/emailquangto/redmine4go/actions)
+Redmine API in Go [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) [![lint](https://github.com/emailquangto/redmine4go/workflows/golangci-lint/badge.svg?branch=main)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3A%22golangci-lint%22)
 
 ===============
 
