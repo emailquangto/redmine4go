@@ -2,57 +2,23 @@ package redmine4go
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 )
-
-// GetIssueListOfProjectWithParameters() returns a raw list of issues (including value of total count, offset, limit)
-// in a project
-// for the default settings (parameters) from protocol scheme JSON
-func (c *Client) GetIssueListOfProjectWithParameters(projectId string) (IssueList, error) {
-	// variable to store return value
-	issueList := IssueList{}
-
-	// set up request
-	req, err := http.NewRequest(http.MethodGet, c.url+"/issues."+c.format+"?project_id="+projectId, nil)
-	if err != nil {
-		return issueList, err
-	}
-	// add headers to the request
-	req.Header.Add("Content-Type", "application/"+c.format)
-	req.Header.Add("X-Redmine-API-Key", c.key)
-	// send the request
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return issueList, err
-	}
-	defer resp.Body.Close()
-
-	// return error if status code is not OK
-	if resp.StatusCode >= http.StatusBadRequest {
-		return issueList, err
-	}
-
-	// parse the response's body
-	bodyContent, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return issueList, err
-	}
-	err = json.Unmarshal([]byte(bodyContent), &issueList)
-
-	return issueList, err
-}
 
 // GetIssueListOfProject() returns a raw list of issues (including value of total count, offset, limit)
 // in a project
 // for the default settings (parameters) from protocol scheme JSON
-func (c *Client) GetIssueListOfProject(projectId string) (IssueList, error) {
+func (c *Client) GetIssueListOfProject(projectId int, para *IssueListParameter, filter *IssueListFilter) (IssueList, error) {
 	// variable to store return value
 	issueList := IssueList{}
 
 	// set up request
-	req, err := http.NewRequest(http.MethodGet, c.url+"/issues."+c.format+"?project_id="+projectId, nil)
+	query := generateIssueListQuery(para, filter)
+	req, err := http.NewRequest(http.MethodGet, c.url+"/issues."+c.format+"?project_id="+strconv.Itoa(projectId)+query, nil)
 	if err != nil {
 		return issueList, err
 	}
@@ -84,17 +50,57 @@ func (c *Client) GetIssueListOfProject(projectId string) (IssueList, error) {
 // GetIssuesOfProject() returns a list of issues only
 // in a project
 // for the default settings (parameters) from protocol scheme JSON
-func (c *Client) GetIssuesOfProject(projectId string) ([]Issue, error) {
+func (c *Client) GetIssuesOfProject(projectId int, para *IssueListParameter, filter *IssueListFilter) ([]Issue, error) {
 	// variable to store return value
 	issues := []Issue{}
 
-	issueList, err := c.GetIssueListOfProject(projectId)
+	issueList, err := c.GetIssueListOfProject(projectId, para, filter)
 	if err != nil {
 		return issues, err
 	}
 	issues = issueList.Issues
 
 	return issues, err
+}
+
+func generateIssueListQuery(para *IssueListParameter, filter *IssueListFilter) string {
+	if para == nil {
+		return ""
+	}
+
+	query := ""
+	if para.Offset != "" {
+		query += fmt.Sprintf("&offset=%v", para.Offset)
+	}
+	if para.Limit != "" {
+		query += fmt.Sprintf("&limit=%v", para.Limit)
+	}
+	if para.Sort != "" {
+		query += fmt.Sprintf("&sort=%v", para.Sort)
+	}
+	if para.Include != "" {
+		query += fmt.Sprintf("&status_id=%v", para.Include)
+	}
+
+	if filter == nil {
+		return query
+	}
+
+	return query
+}
+
+type IssueListParameter struct {
+	Offset  string
+	Limit   string
+	Sort    string
+	Include string
+}
+
+type IssueListFilter struct {
+	Offset  string
+	Limit   string
+	Sort    string
+	Include string
 }
 
 type IssueList struct {
