@@ -24,6 +24,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/emailquangto/redmine4go"
 	"github.com/joho/godotenv"
@@ -32,14 +33,33 @@ import (
 func main() {
 	godotenv.Load("../.env-json")
 
-	baseURL := os.Getenv("BASE_URL")        // https://redmine.domain-name.com
-	apiKey := os.Getenv("API_KEY")          // xxxxxa9a660079fe55yyyyy22979c9fa015xxxxx
-	apiFormat := os.Getenv("API_FORMAT")    // json
-	projectId := os.Getenv("PROJECT_ID")    // 1
+	baseURL := os.Getenv("BASE_URL")
+	apiKey := os.Getenv("API_KEY")
+	apiFormat := os.Getenv("API_FORMAT")
+	projectId, error := strconv.Atoi(os.Getenv("PROJECT_ID"))
 
 	c := redmine4go.CreateClient(baseURL, apiKey, apiFormat)
 
-	issueList, error := c.GetIssueListOfProject(projectId)
+	// default parameters of querying issues
+	paras := &redmine4go.IssueListParameter{
+		0,  // Offset
+		25, // Limit
+		"", // Sort
+		"", // Include
+	}
+
+	// default filters of querying issues
+	filters := &redmine4go.IssueListFilter{
+		nil, // IssueId
+		nil, // ProjectId
+		nil, // SubprojectId
+		nil, // TrackerId
+		nil, // StatusId
+		nil, // AssignedToId
+		nil, // ParentId
+	}
+
+	issueList, error := c.GetIssueListOfProject(projectId, paras, filters)
 	if error == nil {
 		fmt.Printf("Number of issues = %d\n", issueList.TotalCount)
 		fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
@@ -54,7 +74,7 @@ func main() {
 
 	fmt.Printf("%s\n", "=====*****=====")
 
-	issues, error := c.GetIssuesOfProject(projectId)
+	issues, error := c.GetIssuesOfProject(projectId, paras, nil)
 	if error == nil {
 		fmt.Printf("Number of issues = %d\n", len(issues))
 		fmt.Printf("issue 1 - Project = %s\n", issues[0].Project.Name)
@@ -74,52 +94,7 @@ func main() {
 ```go
 package main
 
-import (
-	"fmt"
-	"os"
 
-	"github.com/emailquangto/redmine4go"
-	"github.com/joho/godotenv"
-)
-
-func main() {
-	godotenv.Load("../.env-xml")
-
-	baseURL := os.Getenv("BASE_URL")        // https://redmine.domain-name.com
-	apiKey := os.Getenv("API_KEY")          // xxxxxa9a660079fe55yyyyy22979c9fa015xxxxx
-	apiFormat := os.Getenv("API_FORMAT")    // xml
-	projectId := os.Getenv("PROJECT_ID")    // 1
-
-	c := redmine4go.CreateClient(baseURL, apiKey, apiFormat)
-
-	issueList, error := c.GetIssueListOfProjectXML(projectId)
-	if error == nil {
-		fmt.Printf("Number of issues = %s\n", issueList.TotalCount)
-		fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
-		fmt.Printf("issue 1 - ID = %s\n", issueList.Issues[0].ID)
-		fmt.Printf("issue 1 - Subject = %s\n", issueList.Issues[0].Subject)
-		fmt.Printf("issue 1 - Status = %s\n", issueList.Issues[0].Status.Name)
-		fmt.Printf("issue 1 - Author = %s\n", issueList.Issues[0].Author.Name)
-		fmt.Printf("issue 1 - Assigned To = %s\n", issueList.Issues[0].AssignedTo.Name)
-	} else {
-		fmt.Printf("%s\n", error)
-	}
-
-	fmt.Printf("%s\n", "=====*****=====")
-
-	issues, error := c.GetIssuesOfProjectXML(projectId)
-	if error == nil {
-		fmt.Printf("Number of issues = %d\n", len(issues))
-		fmt.Printf("issue 1 - Project = %s\n", issues[0].Project.Name)
-		fmt.Printf("issue 1 - ID = %d\n", issues[0].ID)
-		fmt.Printf("issue 1 - Subject = %s\n", issues[0].Subject)
-		fmt.Printf("issue 1 - Status = %s\n", issues[0].Status.Name)
-		fmt.Printf("issue 1 - Author = %s\n", issues[0].Author.Name)
-		fmt.Printf("issue 1 - Assigned To = %s\n", issues[0].AssignedTo.Name)
-	} else {
-		fmt.Printf("%s\n", error)
-	}
-}
 ```
 
 ### See more examples under _examples_ folder.

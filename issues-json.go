@@ -69,10 +69,10 @@ func generateIssueListQuery(para *IssueListParameter, filter *IssueListFilter) s
 	}
 
 	query := ""
-	if para.Offset != "" {
+	if para.Offset != nil {
 		query += fmt.Sprintf("&offset=%v", para.Offset)
 	}
-	if para.Limit != "" {
+	if para.Limit != nil {
 		query += fmt.Sprintf("&limit=%v", para.Limit)
 	}
 	if para.Sort != "" {
@@ -86,21 +86,46 @@ func generateIssueListQuery(para *IssueListParameter, filter *IssueListFilter) s
 		return query
 	}
 
+	if filter.IssueId != nil {
+		query += fmt.Sprintf("&issue_id=%v", filter.IssueId)
+	}
+	if filter.ProjectId != nil {
+		query += fmt.Sprintf("&project_id=%v", filter.ProjectId)
+	}
+	if filter.SubprojectId != nil {
+		query += fmt.Sprintf("&subproject_id=%v", filter.SubprojectId)
+	}
+	if filter.TrackerId != nil {
+		query += fmt.Sprintf("&tracker_id=%v", filter.TrackerId)
+	}
+	if filter.StatusId != nil {
+		query += fmt.Sprintf("&status_id=%v", filter.StatusId)
+	}
+	if filter.AssignedToId != nil {
+		query += fmt.Sprintf("&assigned_to_id=%v", filter.AssignedToId)
+	}
+	if filter.ParentId != nil {
+		query += fmt.Sprintf("&parent_id=%v", filter.ParentId)
+	}
+
 	return query
 }
 
 type IssueListParameter struct {
-	Offset  string
-	Limit   string
+	Offset  interface{}
+	Limit   interface{}
 	Sort    string
 	Include string
 }
 
 type IssueListFilter struct {
-	Offset  string
-	Limit   string
-	Sort    string
-	Include string
+	IssueId      interface{}
+	ProjectId    interface{}
+	SubprojectId interface{}
+	TrackerId    interface{}
+	StatusId     interface{}
+	AssignedToId interface{}
+	ParentId     interface{}
 }
 
 type IssueList struct {
