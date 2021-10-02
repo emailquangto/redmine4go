@@ -5,6 +5,8 @@ This library supports most if not all of the `Redmine` REST calls.
 [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) 
 [![lint](https://github.com/emailquangto/redmine4go/workflows/golangci-lint/badge.svg?branch=main)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3A%22golangci-lint%22)
 
+### [Redmine API Reference](https://www.redmine.org/projects/redmine/wiki/Rest_api)
+
 
 ## Installation
 
