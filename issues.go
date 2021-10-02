@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 )
 
 // GetIssues() returns a raw list of issues (including value of total count, offset, limit)
 // with given parameters and filters
 // from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Listing-issues
 func (c *Client) GetIssues(para *IssueListParameter, filter *IssueListFilter) (IssueList, error) {
 	// variable to store return value
 	issueList := IssueList{}
@@ -46,7 +48,46 @@ func (c *Client) GetIssues(para *IssueListParameter, filter *IssueListFilter) (I
 	return issueList, err
 }
 
+// GetIssue() returns details of an issue with given parameters
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Showing-an-issue
+func (c *Client) GetIssue(issueId int, parameters string) (Issue, error) {
+	// variable to store return value
+	issue := Issue{}
+
+	// set up request
+	req, err := http.NewRequest(http.MethodGet, c.url+"/issues/"+strconv.Itoa(issueId)+"."+c.format+"?include="+parameters, nil)
+	if err != nil {
+		return issue, err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return issue, err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return issue, err
+	}
+
+	// parse the response's body
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return issue, err
+	}
+	issueWrapper := IssueWrapper{}
+	err = json.Unmarshal([]byte(bodyContent), &issueWrapper)
+
+	return issueWrapper.Issue, err
+}
+
 // generateIssueListQuery() parses and composes query string for parameters and filters
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Listing-issues
 func generateIssueListQuery(para *IssueListParameter, filter *IssueListFilter) string {
 	if para == nil {
 		return ""
@@ -119,25 +160,32 @@ type IssueList struct {
 	Limit      int     `json:"limit"`
 }
 
+type IssueWrapper struct {
+	Issue Issue `json:"issue"`
+}
+
 type Issue struct {
-	ID             int         `json:"id"`
-	Project        BriefInfo   `json:"project"`
-	Tracker        BriefInfo   `json:"tracker"`
-	Status         BriefInfo   `json:"status"`
-	Priority       BriefInfo   `json:"priority"`
-	Author         BriefInfo   `json:"author"`
-	AssignedTo     BriefInfo   `json:"assigned_to"`
-	Parent         Parent      `json:"parent,omitempty"`
-	Subject        string      `json:"subject"`
-	Description    string      `json:"description"`
-	StartDate      string      `json:"start_date"`
-	DueDate        string      `json:"due_date"`
-	DoneRatio      int         `json:"done_ratio"`
-	IsPrivate      bool        `json:"is_private"`
-	EstimatedHours interface{} `json:"estimated_hours"`
-	CreatedOn      time.Time   `json:"created_on"`
-	UpdatedOn      time.Time   `json:"updated_on"`
-	ClosedOn       interface{} `json:"closed_on"`
+	ID                  int         `json:"id"`
+	Project             BriefInfo   `json:"project"`
+	Tracker             BriefInfo   `json:"tracker"`
+	Status              BriefInfo   `json:"status"`
+	Priority            BriefInfo   `json:"priority"`
+	Author              BriefInfo   `json:"author"`
+	AssignedTo          BriefInfo   `json:"assigned_to,omitempty"`
+	Parent              Parent      `json:"parent,omitempty"`
+	Subject             string      `json:"subject"`
+	Description         string      `json:"description"`
+	StartDate           string      `json:"start_date"`
+	DueDate             string      `json:"due_date"`
+	DoneRatio           int         `json:"done_ratio"`
+	IsPrivate           bool        `json:"is_private"`
+	EstimatedHours      interface{} `json:"estimated_hours"`
+	TotalEstimatedHours interface{} `json:"total_estimated_hours"`
+	SpentHours          interface{} `json:"spent_hours"`
+	TotalSpentHours     interface{} `json:"total_spent_hours"`
+	CreatedOn           time.Time   `json:"created_on"`
+	UpdatedOn           time.Time   `json:"updated_on"`
+	ClosedOn            interface{} `json:"closed_on"`
 }
 
 type BriefInfo struct {

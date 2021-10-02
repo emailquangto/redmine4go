@@ -5,7 +5,7 @@ This library supports most if not all of the `Redmine` REST calls.
 [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) 
 [![lint](https://github.com/emailquangto/redmine4go/workflows/golangci-lint/badge.svg?branch=main)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3A%22golangci-lint%22)
 
-### [Redmine API Reference](https://www.redmine.org/projects/redmine/wiki/Rest_api)
+### [Redmine API Reference](https://www.redmine.org/projects/redmine/wiki/Rest_api) for details of parameters
 
 
 ## Installation
@@ -49,6 +49,7 @@ func main() {
 		"",  // Include
 	}
 
+	// get list of open issues
 	// default filters of querying issues
 	filters := &redmine4go.IssueListFilter{
 		nil, // IssueId = an integer
@@ -59,10 +60,9 @@ func main() {
 		nil, // AssignedToId = an integer or "member-name"
 		nil, // ParentId = an integer
 	}
-
-	// get list of open issues that user can access
 	issueList, error := c.GetIssues(paras, filters)
 	if error == nil {
+		fmt.Printf("%s\n", "=====get list of open issues=====")
 		fmt.Printf("Number of issues = %d\n", issueList.TotalCount)
 		if issueList.TotalCount > 0 {
 			fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
@@ -76,9 +76,8 @@ func main() {
 		fmt.Printf("%s\n", error)
 	}
 
-	fmt.Printf("%s\n", "=====*****=====")
-
-	// default filters of querying issues
+	// get list of open issues of a project
+	// filters of querying issues
 	filters = &redmine4go.IssueListFilter{
 		nil,       // IssueId
 		projectId, // ProjectId
@@ -88,10 +87,9 @@ func main() {
 		nil,       // AssignedToId
 		nil,       // ParentId
 	}
-
-	// get list of open issues of a project that user can access
 	issueList, error = c.GetIssues(paras, filters)
 	if error == nil {
+		fmt.Printf("%s\n", "=====get list of open issues of a project=====")
 		fmt.Printf("Number of issues = %d\n", issueList.TotalCount)
 		if issueList.TotalCount > 0 {
 			fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
@@ -103,6 +101,23 @@ func main() {
 		}
 	} else {
 		fmt.Printf("%s\n", error)
+	}
+
+	// get details of an issue
+	issueId := 1
+	include := "" // children, attachments, relations, changesets, journals, watchers, allowed_statuses
+	issue, err := c.GetIssue(issueId, include)
+	if error == nil {
+		fmt.Printf("%s\n", "=====get details of an issue=====")
+		fmt.Printf("issue - Project = %s\n", issue.Project.Name)
+		fmt.Printf("issue - ID = %d\n", issue.ID)
+		fmt.Printf("issue - Subject = %s\n", issue.Subject)
+		fmt.Printf("issue - Status = %s\n", issue.Status.Name)
+		fmt.Printf("issue - Author = %s\n", issue.Author.Name)
+		fmt.Printf("issue - Assigned To = %s\n", issue.AssignedTo.Name)
+
+	} else {
+		fmt.Printf("%s\n", err)
 	}
 }
 ```
