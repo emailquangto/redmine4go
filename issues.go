@@ -5,20 +5,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 	"time"
 )
 
-// GetIssueListOfProject() returns a raw list of issues (including value of total count, offset, limit)
-// in a project
-// for the default settings (parameters) from protocol scheme JSON
-func (c *Client) GetIssueListOfProject(projectId int, para *IssueListParameter, filter *IssueListFilter) (IssueList, error) {
+// GetIssues() returns a raw list of issues (including value of total count, offset, limit)
+// with given parameters and filters
+// from protocol scheme JSON
+func (c *Client) GetIssues(para *IssueListParameter, filter *IssueListFilter) (IssueList, error) {
 	// variable to store return value
 	issueList := IssueList{}
 
 	// set up request
 	query := generateIssueListQuery(para, filter)
-	req, err := http.NewRequest(http.MethodGet, c.url+"/issues."+c.format+"?project_id="+strconv.Itoa(projectId)+query, nil)
+	req, err := http.NewRequest(http.MethodGet, c.url+"/issues."+c.format+"?"+query, nil)
 	if err != nil {
 		return issueList, err
 	}
@@ -47,22 +46,7 @@ func (c *Client) GetIssueListOfProject(projectId int, para *IssueListParameter, 
 	return issueList, err
 }
 
-// GetIssuesOfProject() returns a list of issues only
-// in a project
-// for the default settings (parameters) from protocol scheme JSON
-func (c *Client) GetIssuesOfProject(projectId int, para *IssueListParameter, filter *IssueListFilter) ([]Issue, error) {
-	// variable to store return value
-	issues := []Issue{}
-
-	issueList, err := c.GetIssueListOfProject(projectId, para, filter)
-	if err != nil {
-		return issues, err
-	}
-	issues = issueList.Issues
-
-	return issues, err
-}
-
+// generateIssueListQuery() parses and composes query string for parameters and filters
 func generateIssueListQuery(para *IssueListParameter, filter *IssueListFilter) string {
 	if para == nil {
 		return ""

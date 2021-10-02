@@ -31,21 +31,21 @@ import (
 )
 
 func main() {
-	godotenv.Load("../.env-json")
+	godotenv.Load("../.env")
 
-	baseURL := os.Getenv("BASE_URL")
-	apiKey := os.Getenv("API_KEY")
-	apiFormat := os.Getenv("API_FORMAT")
-	projectId, error := strconv.Atoi(os.Getenv("PROJECT_ID"))
+	baseURL := os.Getenv("BASE_URL") 							// BASE_URL=https://redmine.domain-name.com
+	apiKey := os.Getenv("API_KEY") 								// API_KEY=sfygbre1$QYFMNAG
+	apiFormat := os.Getenv("API_FORMAT") 						// API_FORMAT=json
+	projectId, error := strconv.Atoi(os.Getenv("PROJECT_ID")) 	// PROJECT_ID=1
 
 	c := redmine4go.CreateClient(baseURL, apiKey, apiFormat)
 
 	// default parameters of querying issues
 	paras := &redmine4go.IssueListParameter{
-		0,  // Offset
-		25, // Limit
-		"", // Sort
-		"", // Include
+		nil, // Offset = 0
+		nil, // Limit = 25
+		"",  // Sort
+		"",  // Include
 	}
 
 	// default filters of querying issues
@@ -59,42 +59,51 @@ func main() {
 		nil, // ParentId
 	}
 
-	issueList, error := c.GetIssueListOfProject(projectId, paras, filters)
+	// get list of open issues that user can access
+	issueList, error := c.GetIssues(paras, filters)
 	if error == nil {
 		fmt.Printf("Number of issues = %d\n", issueList.TotalCount)
-		fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
-		fmt.Printf("issue 1 - ID = %d\n", issueList.Issues[0].ID)
-		fmt.Printf("issue 1 - Subject = %s\n", issueList.Issues[0].Subject)
-		fmt.Printf("issue 1 - Status = %s\n", issueList.Issues[0].Status.Name)
-		fmt.Printf("issue 1 - Author = %s\n", issueList.Issues[0].Author.Name)
-		fmt.Printf("issue 1 - Assigned To = %s\n", issueList.Issues[0].AssignedTo.Name)
+		if issueList.TotalCount > 0 {
+			fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
+			fmt.Printf("issue 1 - ID = %d\n", issueList.Issues[0].ID)
+			fmt.Printf("issue 1 - Subject = %s\n", issueList.Issues[0].Subject)
+			fmt.Printf("issue 1 - Status = %s\n", issueList.Issues[0].Status.Name)
+			fmt.Printf("issue 1 - Author = %s\n", issueList.Issues[0].Author.Name)
+			fmt.Printf("issue 1 - Assigned To = %s\n", issueList.Issues[0].AssignedTo.Name)
+		}
 	} else {
 		fmt.Printf("%s\n", error)
 	}
 
 	fmt.Printf("%s\n", "=====*****=====")
 
-	issues, error := c.GetIssuesOfProject(projectId, paras, nil)
+	// default filters of querying issues
+	filters = &redmine4go.IssueListFilter{
+		nil,       // IssueId
+		projectId, // ProjectId
+		nil,       // SubprojectId
+		nil,       // TrackerId
+		nil,       // StatusId
+		nil,       // AssignedToId
+		nil,       // ParentId
+	}
+
+	// get list of open issues of a project that user can access
+	issueList, error = c.GetIssues(paras, filters)
 	if error == nil {
-		fmt.Printf("Number of issues = %d\n", len(issues))
-		fmt.Printf("issue 1 - Project = %s\n", issues[0].Project.Name)
-		fmt.Printf("issue 1 - ID = %d\n", issues[0].ID)
-		fmt.Printf("issue 1 - Subject = %s\n", issues[0].Subject)
-		fmt.Printf("issue 1 - Status = %s\n", issues[0].Status.Name)
-		fmt.Printf("issue 1 - Author = %s\n", issues[0].Author.Name)
-		fmt.Printf("issue 1 - Assigned To = %s\n", issues[0].AssignedTo.Name)
+		fmt.Printf("Number of issues = %d\n", issueList.TotalCount)
+		if issueList.TotalCount > 0 {
+			fmt.Printf("issue 1 - Project = %s\n", issueList.Issues[0].Project.Name)
+			fmt.Printf("issue 1 - ID = %d\n", issueList.Issues[0].ID)
+			fmt.Printf("issue 1 - Subject = %s\n", issueList.Issues[0].Subject)
+			fmt.Printf("issue 1 - Status = %s\n", issueList.Issues[0].Status.Name)
+			fmt.Printf("issue 1 - Author = %s\n", issueList.Issues[0].Author.Name)
+			fmt.Printf("issue 1 - Assigned To = %s\n", issueList.Issues[0].AssignedTo.Name)
+		}
 	} else {
 		fmt.Printf("%s\n", error)
 	}
 }
-```
-
-### Get issues of a Redmine project using protocol scheme **XML**
-
-```go
-package main
-
-
 ```
 
 ### See more examples under _examples_ folder.

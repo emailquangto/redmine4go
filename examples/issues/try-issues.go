@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	godotenv.Load("../.env-json")
+	godotenv.Load("../.env")
 
 	baseURL := os.Getenv("BASE_URL")
 	apiKey := os.Getenv("API_KEY")
