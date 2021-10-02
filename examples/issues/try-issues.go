@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/emailquangto/redmine4go"
 	"github.com/joho/godotenv"
@@ -15,7 +14,7 @@ func main() {
 	baseURL := os.Getenv("BASE_URL")
 	apiKey := os.Getenv("API_KEY")
 	apiFormat := os.Getenv("API_FORMAT")
-	projectId, error := strconv.Atoi(os.Getenv("PROJECT_ID"))
+	projectId := os.Getenv("PROJECT_ID")
 
 	c := redmine4go.CreateClient(baseURL, apiKey, apiFormat)
 
@@ -29,13 +28,13 @@ func main() {
 
 	// default filters of querying issues
 	filters := &redmine4go.IssueListFilter{
-		nil, // IssueId
-		nil, // ProjectId
-		nil, // SubprojectId
-		nil, // TrackerId
-		nil, // StatusId
-		nil, // AssignedToId
-		nil, // ParentId
+		nil, // IssueId = an integer
+		nil, // ProjectId = an integer or "project-name"
+		nil, // SubprojectId = an integer or "sub-project-name"
+		nil, // TrackerId = an integer
+		nil, // StatusId = an integer or "status-name"
+		nil, // AssignedToId = an integer or "member-name"
+		nil, // ParentId = an integer
 	}
 
 	// get list of open issues that user can access
