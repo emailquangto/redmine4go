@@ -83,8 +83,8 @@ func main() {
 	// get details of an issue
 	issueId := 13430
 	include := "" // children, attachments, relations, changesets, journals, watchers, allowed_statuses
-	issue, err := c.GetIssue(issueId, include)
-	if err == nil {
+	issue, error := c.GetIssue(issueId, include)
+	if error == nil {
 		fmt.Printf("%s\n", "=====get details of an issue=====")
 		fmt.Printf("issue - Project = %s\n", issue.Project.Name)
 		fmt.Printf("issue - ID = %d\n", issue.ID)
@@ -94,7 +94,7 @@ func main() {
 		fmt.Printf("issue - Assigned To = %s\n", issue.AssignedTo.Name)
 
 	} else {
-		fmt.Printf("%s\n", err)
+		fmt.Printf("%s\n", error)
 	}
 
 	// create a new issue
@@ -107,8 +107,8 @@ func main() {
 		Description: "testing CreateIssue() of Redmine API in Go",
 	}
 	issueNewWrapper := redmine4go.IssueNewWrapper{IssueNew: issueNew}
-	issueNewReturn, er := c.CreateIssue(issueNewWrapper)
-	if er == nil {
+	issueNewReturn, error := c.CreateIssue(issueNewWrapper)
+	if error == nil {
 		fmt.Printf("%s\n", "=====create a new issue=====")
 		fmt.Printf("issue - Project = %s\n", issueNewReturn.Project.Name)
 		fmt.Printf("issue - ID = %d\n", issueNewReturn.ID)
@@ -118,6 +118,6 @@ func main() {
 		fmt.Printf("issue - Assigned To = %s\n", issueNewReturn.AssignedTo.Name)
 
 	} else {
-		fmt.Printf("%s\n", er)
+		fmt.Printf("%s\n", error)
 	}
 }

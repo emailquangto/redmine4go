@@ -96,6 +96,9 @@ func (c *Client) CreateIssue(issueNewWrapper IssueNewWrapper) (Issue, error) {
 
 	// set up request
 	paras, err := json.Marshal(issueNewWrapper)
+	if err != nil {
+		return issue, err
+	}
 	req, err := http.NewRequest(http.MethodPost, c.url+"/issues"+"."+c.format, bytes.NewBuffer(paras))
 	if err != nil {
 		return issue, err
