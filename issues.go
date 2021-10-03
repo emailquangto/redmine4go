@@ -1,6 +1,7 @@
 package redmine4go
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -57,6 +58,45 @@ func (c *Client) GetIssue(issueId int, parameters string) (Issue, error) {
 
 	// set up request
 	req, err := http.NewRequest(http.MethodGet, c.url+"/issues/"+strconv.Itoa(issueId)+"."+c.format+"?include="+parameters, nil)
+	if err != nil {
+		return issue, err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return issue, err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return issue, err
+	}
+
+	// parse the response's body
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return issue, err
+	}
+	issueWrapper := IssueWrapper{}
+	err = json.Unmarshal([]byte(bodyContent), &issueWrapper)
+
+	return issueWrapper.Issue, err
+}
+
+// CreateIssue() creates a new issue with given parameters
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Creating-an-issue
+func (c *Client) CreateIssue(issueNewWrapper IssueNewWrapper) (Issue, error) {
+	// variable to store return value
+	issue := Issue{}
+
+	// set up request
+	paras, err := json.Marshal(issueNewWrapper)
+	req, err := http.NewRequest(http.MethodPost, c.url+"/issues"+"."+c.format, bytes.NewBuffer(paras))
 	if err != nil {
 		return issue, err
 	}
@@ -188,10 +228,24 @@ type Issue struct {
 	ClosedOn            interface{} `json:"closed_on"`
 }
 
+type IssueNewWrapper struct {
+	IssueNew IssueNew `json:"issue"`
+}
+
+type IssueNew struct {
+	Project     int    `json:"project_id"`
+	Tracker     int    `json:"tracker_id"`
+	Status      int    `json:"status_id"`
+	Priority    int    `json:"priority_id"`
+	Subject     string `json:"subject"`
+	Description string `json:"description"`
+}
+
 type BriefInfo struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
+
 type Parent struct {
 	ID int `json:"id"`
 }

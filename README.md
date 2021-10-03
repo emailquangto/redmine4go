@@ -43,22 +43,22 @@ func main() {
 
 	// default parameters of querying issues
 	paras := &redmine4go.IssueListParameter{
-		nil, // Offset = 0
-		nil, // Limit = 25
-		"",  // Sort
-		"",  // Include
+		Offset:  nil, // = 0
+		Limit:   nil, // = 25
+		Sort:    "",  // Default
+		Include: "",  // None
 	}
 
 	// get list of open issues
 	// default filters of querying issues
 	filters := &redmine4go.IssueListFilter{
-		nil, // IssueId = an integer
-		nil, // ProjectId = an integer or "project-name"
-		nil, // SubprojectId = an integer or "sub-project-name"
-		nil, // TrackerId = an integer
-		nil, // StatusId = an integer or "status-name"
-		nil, // AssignedToId = an integer or "member-name"
-		nil, // ParentId = an integer
+		IssueId:      nil, // an integer
+		ProjectId:    nil, // an integer or "project-name"
+		SubprojectId: nil, // an integer or "sub-project-name"
+		TrackerId:    nil, // an integer
+		StatusId:     nil, // an integer or "status-name"
+		AssignedToId: nil, // an integer or "member-name"
+		ParentId:     nil, // an integer
 	}
 	issueList, error := c.GetIssues(paras, filters)
 	if error == nil {
@@ -79,13 +79,13 @@ func main() {
 	// get list of open issues of a project
 	// filters of querying issues
 	filters = &redmine4go.IssueListFilter{
-		nil,       // IssueId
-		projectId, // ProjectId
-		nil,       // SubprojectId
-		nil,       // TrackerId
-		nil,       // StatusId
-		nil,       // AssignedToId
-		nil,       // ParentId
+		IssueId:      nil,
+		ProjectId:    projectId,
+		SubprojectId: nil,
+		TrackerId:    nil,
+		StatusId:     nil,
+		AssignedToId: nil,
+		ParentId:     nil,
 	}
 	issueList, error = c.GetIssues(paras, filters)
 	if error == nil {
@@ -104,7 +104,7 @@ func main() {
 	}
 
 	// get details of an issue
-	issueId := 1
+	issueId := 13430
 	include := "" // children, attachments, relations, changesets, journals, watchers, allowed_statuses
 	issue, err := c.GetIssue(issueId, include)
 	if error == nil {
@@ -115,6 +115,30 @@ func main() {
 		fmt.Printf("issue - Status = %s\n", issue.Status.Name)
 		fmt.Printf("issue - Author = %s\n", issue.Author.Name)
 		fmt.Printf("issue - Assigned To = %s\n", issue.AssignedTo.Name)
+
+	} else {
+		fmt.Printf("%s\n", err)
+	}
+
+	// create a new issue
+	issueNew := redmine4go.IssueNew{
+		Project:     16,
+		Tracker:     1,
+		Status:      1,
+		Priority:    2,
+		Subject:     "a new issue auto-posted from redmine4go",
+		Description: "testing CreateIssue() of Redmine API in Go",
+	}
+	issueNewWrapper := redmine4go.IssueNewWrapper{IssueNew: issueNew}
+	issueNewReturn, err := c.CreateIssue(issueNewWrapper)
+	if error == nil {
+		fmt.Printf("%s\n", "=====create a new issue=====")
+		fmt.Printf("issue - Project = %s\n", issueNewReturn.Project.Name)
+		fmt.Printf("issue - ID = %d\n", issueNewReturn.ID)
+		fmt.Printf("issue - Subject = %s\n", issueNewReturn.Subject)
+		fmt.Printf("issue - Status = %s\n", issueNewReturn.Status.Name)
+		fmt.Printf("issue - Author = %s\n", issueNewReturn.Author.Name)
+		fmt.Printf("issue - Assigned To = %s\n", issueNewReturn.AssignedTo.Name)
 
 	} else {
 		fmt.Printf("%s\n", err)
