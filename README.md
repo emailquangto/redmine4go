@@ -7,6 +7,15 @@ This library supports most if not all of the `Redmine` REST calls.
 
 ### [Redmine API Reference](https://www.redmine.org/projects/redmine/wiki/Rest_api) for details of parameters
 
+## Interfaces
+
+|API                |Implements|Functions      |
+|-------------------|----------|---------------|
+|Issues             |       50%|	       |
+|		    |          |- GetIssues()  |
+|             	    |          |- GetIssue()   |
+|             	    |          |- CreateIssue()|
+
 
 ## Installation
 
