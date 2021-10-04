@@ -90,7 +90,7 @@ func (c *Client) GetIssue(issueId int, parameters string) (Issue, error) {
 // CreateIssue() creates a new issue with given parameters
 // from protocol scheme JSON
 // Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Creating-an-issue
-func (c *Client) CreateIssue(issueNewWrapper IssueNewWrapper) (Issue, error) {
+func (c *Client) CreateIssue(issueNewWrapper IssueToSendWrapper) (Issue, error) {
 	// variable to store return value
 	issue := Issue{}
 
@@ -132,7 +132,7 @@ func (c *Client) CreateIssue(issueNewWrapper IssueNewWrapper) (Issue, error) {
 // UpdateIssue() updates an issue with given parameters
 // from protocol scheme JSON
 // Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Updating-an-issue
-func (c *Client) UpdateIssue(issueId int, issueUpdateWrapper IssueUpdateWrapper) error {
+func (c *Client) UpdateIssue(issueId int, issueUpdateWrapper IssueToSendWrapper) error {
 	// set up request
 	paras, err := json.Marshal(issueUpdateWrapper)
 	if err != nil {
@@ -262,24 +262,13 @@ type Issue struct {
 	ClosedOn            interface{} `json:"closed_on"`
 }
 
-type IssueNewWrapper struct {
-	IssueNew IssueNew `json:"issue"`
+type IssueToSendWrapper struct {
+	Issue IssueToSend `json:"issue"`
 }
 
-type IssueNew struct {
+type IssueToSend struct {
 	Project     int    `json:"project_id"`
 	Tracker     int    `json:"tracker_id"`
-	Status      int    `json:"status_id"`
-	Priority    int    `json:"priority_id"`
-	Subject     string `json:"subject"`
-	Description string `json:"description"`
-}
-
-type IssueUpdateWrapper struct {
-	Issue IssueUpdate `json:"issue"`
-}
-
-type IssueUpdate struct {
 	Status      int    `json:"status_id"`
 	Priority    int    `json:"priority_id"`
 	Subject     string `json:"subject"`

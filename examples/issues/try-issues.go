@@ -98,7 +98,7 @@ func main() {
 	}
 
 	// create a new issue
-	issueNew := redmine4go.IssueNew{
+	issueNew := redmine4go.IssueToSend{
 		Project:     16,
 		Tracker:     1,
 		Status:      1,
@@ -106,7 +106,7 @@ func main() {
 		Subject:     "a new issue auto-posted from redmine4go",
 		Description: "testing CreateIssue() of Redmine API in Go",
 	}
-	issueNewWrapper := redmine4go.IssueNewWrapper{IssueNew: issueNew}
+	issueNewWrapper := redmine4go.IssueToSendWrapper{Issue: issueNew}
 	issueNewReturn, error := c.CreateIssue(issueNewWrapper)
 	if error == nil {
 		fmt.Printf("%s\n", "=====create a new issue=====")
@@ -122,7 +122,7 @@ func main() {
 	}
 
 	// update an issue
-	issueUpdateWrapper := redmine4go.IssueUpdateWrapper{Issue: redmine4go.IssueUpdate{
+	issueUpdateWrapper := redmine4go.IssueToSendWrapper{Issue: redmine4go.IssueToSend{
 		Status:      2,
 		Priority:    1,
 		Subject:     "from code",
