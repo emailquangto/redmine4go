@@ -187,6 +187,64 @@ func (c *Client) DeleteIssue(issueId int) error {
 	return err
 }
 
+// AddWatcher() adds a watch to an issue
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Adding-a-watcher
+func (c *Client) AddWatcher(issueId int, watcher Watcher) error {
+
+	paras, err := json.Marshal(watcher)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPost, c.url+"/issues/"+strconv.Itoa(issueId)+"/watchers"+"."+c.format, bytes.NewBuffer(paras))
+	if err != nil {
+		return err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return err
+	}
+
+	return err
+}
+
+// RemoveWatcher() removes a watcher from an issue
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Removing-a-watcher
+func (c *Client) RemoveWatcher(issueId, userId int) error {
+
+	req, err := http.NewRequest(http.MethodDelete, c.url+"/issues/"+strconv.Itoa(issueId)+"/watchers/"+strconv.Itoa(userId)+"."+c.format, nil)
+	if err != nil {
+		return err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return err
+	}
+
+	return err
+}
+
 // generateIssueListQuery() parses and composes query string for parameters and filters
 // Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Listing-issues
 func generateIssueListQuery(para *IssueListParameter, filter *IssueListFilter) string {
@@ -309,4 +367,8 @@ type BriefInfo struct {
 
 type Parent struct {
 	ID int `json:"id"`
+}
+
+type Watcher struct {
+	ID int `json:"user_id"`
 }

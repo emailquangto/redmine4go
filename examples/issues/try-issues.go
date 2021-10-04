@@ -153,9 +153,27 @@ func main() {
 	error = c.DeleteIssue(issueNewReturn.ID)
 	if error == nil {
 		fmt.Printf("%s\n", "=====delete an issue=====")
-		fmt.Printf("issue %d deleted", issueNewReturn.ID)
+		fmt.Printf("issue %d deleted\n", issueNewReturn.ID)
 	} else {
 		fmt.Printf("%s\n", error)
 	}
 
+	// add a watcher to an issue
+	watcher := redmine4go.Watcher{ID: 6}
+	error = c.AddWatcher(22455, watcher)
+	if error == nil {
+		fmt.Printf("%s\n", "=====add a watcher to an issue=====")
+		fmt.Printf("%s\n", "watcher added")
+	} else {
+		fmt.Printf("%s\n", error)
+	}
+
+	// remove a watcher from an issue
+	error = c.RemoveWatcher(22455, 6)
+	if error == nil {
+		fmt.Printf("%s\n", "=====add a watcher to an issue=====")
+		fmt.Printf("%s\n", "watcher added")
+	} else {
+		fmt.Printf("%s\n", error)
+	}
 }
