@@ -11,11 +11,12 @@ This library supports most if not all of the `Redmine` REST calls.
 
 |API                |Implements|Functions      |
 |-------------------|----------|---------------|
-|Issues             |       70%|	       	   |
+|Issues             |       80%|	       	   |
 |		    		|          |- GetIssues()  |
 |             	    |          |- GetIssue()   |
 |             	    |          |- CreateIssue()|
 |             	    |          |- UpdateIssue()|
+|             	    |          |- DeleteIssue()|
 
 
 ## Installation
@@ -131,7 +132,7 @@ func main() {
 	}
 
 	// create a new issue
-	issueNew := redmine4go.IssueNew{
+	issueNew := redmine4go.IssueToSend{
 		Project:     16,
 		Tracker:     1,
 		Status:      1,
@@ -139,7 +140,7 @@ func main() {
 		Subject:     "a new issue auto-posted from redmine4go",
 		Description: "testing CreateIssue() of Redmine API in Go",
 	}
-	issueNewWrapper := redmine4go.IssueNewWrapper{IssueNew: issueNew}
+	issueNewWrapper := redmine4go.IssueToSendWrapper{Issue: issueNew}
 	issueNewReturn, error := c.CreateIssue(issueNewWrapper)
 	if error == nil {
 		fmt.Printf("%s\n", "=====create a new issue=====")
@@ -155,7 +156,7 @@ func main() {
 	}
 
 	// update an issue
-	issueUpdateWrapper := redmine4go.IssueUpdateWrapper{Issue: redmine4go.IssueUpdate{
+	issueUpdateWrapper := redmine4go.IssueToSendWrapper{Issue: redmine4go.IssueToSend{
 		Status:      2,
 		Priority:    1,
 		Subject:     "from code",
@@ -181,6 +182,16 @@ func main() {
 			fmt.Printf("%s\n", error)
 		}
 	}
+
+	// delete an issue
+	error = c.DeleteIssue(issueNewReturn.ID)
+	if error == nil {
+		fmt.Printf("%s\n", "=====delete an issue=====")
+		fmt.Printf("issue %d deleted", issueNewReturn.ID)
+	} else {
+		fmt.Printf("%s\n", error)
+	}
+
 }
 ```
 

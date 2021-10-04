@@ -148,4 +148,14 @@ func main() {
 			fmt.Printf("%s\n", error)
 		}
 	}
+
+	// delete an issue
+	error = c.DeleteIssue(issueNewReturn.ID)
+	if error == nil {
+		fmt.Printf("%s\n", "=====delete an issue=====")
+		fmt.Printf("issue %d deleted", issueNewReturn.ID)
+	} else {
+		fmt.Printf("%s\n", error)
+	}
+
 }
