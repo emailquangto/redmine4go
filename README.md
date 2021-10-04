@@ -11,12 +11,14 @@ This library supports most if not all of the `Redmine` REST calls.
 
 |API                |Implements|Functions      |
 |-------------------|----------|---------------|
-|Issues             |       80%|	       	   |
+|Issues             |      100%|	       	   |
 |		    		|          |- GetIssues()  |
 |             	    |          |- GetIssue()   |
 |             	    |          |- CreateIssue()|
 |             	    |          |- UpdateIssue()|
 |             	    |          |- DeleteIssue()|
+|             	    |          |-  AddWatcher()|
+|             	    |          |- RemoveWatcher()|
 
 
 ## Installation
