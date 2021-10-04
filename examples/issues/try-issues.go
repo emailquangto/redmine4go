@@ -120,4 +120,32 @@ func main() {
 	} else {
 		fmt.Printf("%s\n", error)
 	}
+
+	// update an issue
+	issueUpdateWrapper := redmine4go.IssueUpdateWrapper{Issue: redmine4go.IssueUpdate{
+		Status:      2,
+		Priority:    1,
+		Subject:     "from code",
+		Description: "code changed",
+	}}
+	error = c.UpdateIssue(issueNewReturn.ID, issueUpdateWrapper)
+	if error == nil {
+		fmt.Printf("%s\n", "=====update an issue=====")
+		// get details of updated issue
+		include := ""
+		issue, error := c.GetIssue(issueNewReturn.ID, include)
+		if error == nil {
+			fmt.Printf("%s\n", "**details of updated issue**")
+			fmt.Printf("issue - Project = %s\n", issue.Project.Name)
+			fmt.Printf("issue - ID = %d\n", issue.ID)
+			fmt.Printf("issue - Status updated = %s\n", issue.Status.Name)
+			fmt.Printf("issue - Priority updated = %s\n", issue.Priority.Name)
+			fmt.Printf("issue - Subject updated = %s\n", issue.Subject)
+			fmt.Printf("issue - Description updated = %s\n", issue.Description)
+			fmt.Printf("issue - Author = %s\n", issue.Author.Name)
+			fmt.Printf("issue - Assigned To = %s\n", issue.AssignedTo.Name)
+		} else {
+			fmt.Printf("%s\n", error)
+		}
+	}
 }

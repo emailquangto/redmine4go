@@ -129,6 +129,37 @@ func (c *Client) CreateIssue(issueNewWrapper IssueNewWrapper) (Issue, error) {
 	return issueWrapper.Issue, err
 }
 
+// UpdateIssue() updates an issue with given parameters
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Updating-an-issue
+func (c *Client) UpdateIssue(issueId int, issueUpdateWrapper IssueUpdateWrapper) error {
+	// set up request
+	paras, err := json.Marshal(issueUpdateWrapper)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, c.url+"/issues/"+strconv.Itoa(issueId)+"."+c.format, bytes.NewBuffer(paras))
+	if err != nil {
+		return err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return err
+	}
+
+	return err
+}
+
 // generateIssueListQuery() parses and composes query string for parameters and filters
 // Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Listing-issues
 func generateIssueListQuery(para *IssueListParameter, filter *IssueListFilter) string {
@@ -238,6 +269,17 @@ type IssueNewWrapper struct {
 type IssueNew struct {
 	Project     int    `json:"project_id"`
 	Tracker     int    `json:"tracker_id"`
+	Status      int    `json:"status_id"`
+	Priority    int    `json:"priority_id"`
+	Subject     string `json:"subject"`
+	Description string `json:"description"`
+}
+
+type IssueUpdateWrapper struct {
+	Issue IssueUpdate `json:"issue"`
+}
+
+type IssueUpdate struct {
 	Status      int    `json:"status_id"`
 	Priority    int    `json:"priority_id"`
 	Subject     string `json:"subject"`
