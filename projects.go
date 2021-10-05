@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -45,11 +46,53 @@ func (c *Client) GetProjects(parameters string) (ProjectList, error) {
 	return projectList, err
 }
 
+// GetProject() returns details of a project with given parameters
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Showing-a-project
+func (c *Client) GetProject(projectId int, parameters string) (Project, error) {
+	// variable to store return value
+	project := Project{}
+
+	// set up request
+	req, err := http.NewRequest(http.MethodGet, c.url+"/projects/"+strconv.Itoa(projectId)+"."+c.format+"?include="+parameters, nil)
+	if err != nil {
+		return project, err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return project, err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return project, err
+	}
+
+	// parse the response's body
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return project, err
+	}
+	projectWrapper := ProjectWrapper{}
+	err = json.Unmarshal([]byte(bodyContent), &projectWrapper)
+
+	return projectWrapper.Project, err
+}
+
 type ProjectList struct {
 	Projects   []Project `json:"projects"`
 	TotalCount int       `json:"total_count"`
 	Offset     int       `json:"offset"`
 	Limit      int       `json:"limit"`
+}
+
+type ProjectWrapper struct {
+	Project Project `json:"project"`
 }
 
 type Project struct {

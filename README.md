@@ -9,7 +9,7 @@ This library (in progress) supports most if not all of the `Redmine` REST calls.
 
 ## Interfaces
 
-|API                |Implements|Functions      |
+|API                |Coverage  |Functions      |
 |-------------------|----------|---------------|
 |Issues             |      100%|	       	   |
 |		    		|          |- GetIssues()  |
@@ -19,7 +19,8 @@ This library (in progress) supports most if not all of the `Redmine` REST calls.
 |             	    |          |- DeleteIssue()|
 |             	    |          |-  AddWatcher()|
 |             	    |          |- RemoveWatcher()|
-|Projects           |       20%|- GetProjects()|
+|Projects           |       30%|- GetProjects()|
+|             	    |          |- GetProject() |
 
 ## Installation
 
