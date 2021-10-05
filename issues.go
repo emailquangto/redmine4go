@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-// GetIssues() returns a raw list of issues (including value of total count, offset, limit)
-// with given parameters and filters
+// GetIssues() returns a paginated list of issues with given parameters and filters.
+// By default, it returns open issues only
 // from protocol scheme JSON
 // Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Listing-issues
 func (c *Client) GetIssues(para *IssueListParameter, filter *IssueListFilter) (IssueList, error) {
