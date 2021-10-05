@@ -16,6 +16,7 @@ func main() {
 	apiKey := os.Getenv("API_KEY")
 	apiFormat := os.Getenv("API_FORMAT")
 	projectId := os.Getenv("PROJECT_ID")
+	projectName := os.Getenv("PROJECT_NAME")
 
 	c := redmine4go.CreateClient(baseURL, apiKey, apiFormat)
 
@@ -36,11 +37,12 @@ func main() {
 
 	// get details of a project
 	include = "" // trackers, issue_categories, enabled_modules
+	// using projectId as integer
 	pId, error := strconv.Atoi(projectId)
 	if error == nil {
 		project, error := c.GetProject(pId, include)
 		if error == nil {
-			fmt.Printf("%s\n", "=====get details of a project=====")
+			fmt.Printf("%s\n", "=====get details of a project (using project Id)=====")
 			fmt.Printf("project 1 - Name = %s\n", project.Name)
 			fmt.Printf("project 1 - ID = %d\n", project.ID)
 			fmt.Printf("project 1 - Status = %d\n", project.Status)
@@ -48,6 +50,18 @@ func main() {
 		} else {
 			fmt.Printf("%s\n", error)
 		}
+	} else {
+		fmt.Printf("%s\n", error)
+	}
+
+	// using projectId as integer
+	project, error := c.GetProject(projectName, include)
+	if error == nil {
+		fmt.Printf("%s\n", "=====get details of a project (using project name)=====")
+		fmt.Printf("project 1 - Name = %s\n", project.Name)
+		fmt.Printf("project 1 - ID = %d\n", project.ID)
+		fmt.Printf("project 1 - Status = %d\n", project.Status)
+
 	} else {
 		fmt.Printf("%s\n", error)
 	}

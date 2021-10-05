@@ -2,9 +2,9 @@ package redmine4go
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -49,12 +49,13 @@ func (c *Client) GetProjects(parameters string) (ProjectList, error) {
 // GetProject() returns details of a project with given parameters
 // from protocol scheme JSON
 // Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Showing-a-project
-func (c *Client) GetProject(projectId int, parameters string) (Project, error) {
+func (c *Client) GetProject(projectIdOrName interface{}, parameters string) (Project, error) {
 	// variable to store return value
 	project := Project{}
 
 	// set up request
-	req, err := http.NewRequest(http.MethodGet, c.url+"/projects/"+strconv.Itoa(projectId)+"."+c.format+"?include="+parameters, nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v/projects/%v.%v?include=%v", c.url, projectIdOrName, c.format, parameters), nil)
+
 	if err != nil {
 		return project, err
 	}
