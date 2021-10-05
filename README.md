@@ -1,6 +1,6 @@
 # Redmine API in Go
 
-This library supports most if not all of the `Redmine` REST calls.
+This library (in progress) supports most if not all of the `Redmine` REST calls.
 
 [![GoDoc](https://godoc.org/github.com/emailquangto/redmine4go?status.svg)](https://godoc.org/github.com/emailquangto/redmine4go) 
 [![lint](https://github.com/emailquangto/redmine4go/workflows/golangci-lint/badge.svg?branch=main)](https://github.com/emailquangto/redmine4go/actions?query=workflow%3A%22golangci-lint%22)
@@ -19,7 +19,7 @@ This library supports most if not all of the `Redmine` REST calls.
 |             	    |          |- DeleteIssue()|
 |             	    |          |-  AddWatcher()|
 |             	    |          |- RemoveWatcher()|
-
+|Projects             |      10%|	       	   |
 
 ## Installation
 
@@ -31,7 +31,7 @@ This library supports most if not all of the `Redmine` REST calls.
 ## Example
    -------
 
-### Get issues of a Redmine project using protocol scheme **JSON**
+### CRUD of issues using protocol scheme **JSON**
 
 ```go
 package main
