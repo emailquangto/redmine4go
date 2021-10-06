@@ -85,6 +85,37 @@ func (c *Client) GetProject(projectIdOrName interface{}, parameters string) (Pro
 	return projectWrapper.Project, err
 }
 
+// ArchiveProject() archives the project of given id or identifier
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project
+func (c *Client) ArchiveProject(projectIdOrName interface{}) error {
+
+	// set up request
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%v/projects/%v/archive.%v", c.url, projectIdOrName, c.format), nil)
+
+	if err != nil {
+		return err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// parse the response's body
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(bodyContent))
+
+	return err
+}
+
 type ProjectList struct {
 	Projects   []Project `json:"projects"`
 	TotalCount int       `json:"total_count"`

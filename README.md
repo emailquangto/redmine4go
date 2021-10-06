@@ -19,8 +19,10 @@ This library (in progress) supports most if not all of the `Redmine` REST calls.
 |             	    |          |- DeleteIssue()|
 |             	    |          |-  AddWatcher()|
 |             	    |          |- RemoveWatcher()|
-|Projects           |       30%|- GetProjects()|
+|Projects           |       40%|				|
+|		            |          |- GetProjects()|
 |             	    |          |- GetProject() |
+|             	    |          |- ArchiveProject()|
 
 ## Installation
 

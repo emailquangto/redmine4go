@@ -54,7 +54,7 @@ func main() {
 		fmt.Printf("%s\n", error)
 	}
 
-	// using projectId as integer
+	// using projectId as string of project name
 	project, error := c.GetProject(projectName, include)
 	if error == nil {
 		fmt.Printf("%s\n", "=====get details of a project (using project name)=====")
@@ -66,4 +66,23 @@ func main() {
 		fmt.Printf("%s\n", error)
 	}
 
+	/*
+		// archive a project
+		// using projectId as integer
+		error = c.ArchiveProject(projectId)
+		if error == nil {
+			fmt.Printf("%s\n", "=====archive a project (using project Id)=====")
+			fmt.Printf("project %s is archived\n", projectId)
+		} else {
+			fmt.Printf("%s\n", error)
+		}
+		// using projectId as string of project name
+		error = c.ArchiveProject(projectName)
+		if error == nil {
+			fmt.Printf("%s\n", "=====archive a project (using project name)=====")
+			fmt.Printf("project %s is archived\n", projectName)
+		} else {
+			fmt.Printf("%s\n", error)
+		}
+	*/
 }
