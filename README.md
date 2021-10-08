@@ -19,9 +19,10 @@ This library (in progress) supports most if not all of the `Redmine` REST calls.
 |             	    |          |- DeleteIssue()|	       	   |
 |             	    |          |-  AddWatcher()|	       	   |
 |             	    |          |- RemoveWatcher()|	       	   |
-|Projects           |       40%|				|	       	   |
+|Projects           |       80%|				|	       	   |
 |		            |          |- GetProjects()|	       	   |
 |             	    |          |- GetProject() |	       	   |
+|             	    |          |- CreateProject() |	       	   |
 |             	    |          |- ArchiveProject()|Only available since Redmine 5.0|
 |             	    |          |- UnarchiveProject()|Only available since Redmine 5.0|
 
