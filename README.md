@@ -9,20 +9,21 @@ This library (in progress) supports most if not all of the `Redmine` REST calls.
 
 ## Interfaces
 
-|API                |Coverage  |Functions      |
-|-------------------|----------|---------------|
-|Issues             |      100%|	       	   |
-|		    		|          |- GetIssues()  |
-|             	    |          |- GetIssue()   |
-|             	    |          |- CreateIssue()|
-|             	    |          |- UpdateIssue()|
-|             	    |          |- DeleteIssue()|
-|             	    |          |-  AddWatcher()|
-|             	    |          |- RemoveWatcher()|
-|Projects           |       40%|				|
-|		            |          |- GetProjects()|
-|             	    |          |- GetProject() |
-|             	    |          |- ArchiveProject()|
+|API                |Coverage  |Functions      |Remark      |
+|-------------------|----------|---------------|---------------|
+|Issues             |      100%|	       	   |	       	   |
+|		    		|          |- GetIssues()  |	       	   |
+|             	    |          |- GetIssue()   |	       	   |
+|             	    |          |- CreateIssue()|	       	   |
+|             	    |          |- UpdateIssue()|	       	   |
+|             	    |          |- DeleteIssue()|	       	   |
+|             	    |          |-  AddWatcher()|	       	   |
+|             	    |          |- RemoveWatcher()|	       	   |
+|Projects           |       40%|				|	       	   |
+|		            |          |- GetProjects()|	       	   |
+|             	    |          |- GetProject() |	       	   |
+|             	    |          |- ArchiveProject()|Only available since Redmine 5.0|
+|             	    |          |- UnarchiveProject()|Only available since Redmine 5.0|
 
 ## Installation
 

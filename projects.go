@@ -106,12 +106,29 @@ func (c *Client) ArchiveProject(projectIdOrName interface{}) error {
 	}
 	defer resp.Body.Close()
 
-	// parse the response's body
-	bodyContent, err := ioutil.ReadAll(resp.Body)
+	return err
+}
+
+// UnarchiveProject() unarchives the project of given id or identifier
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project
+func (c *Client) UnarchiveProject(projectIdOrName interface{}) error {
+
+	// set up request
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%v/projects/%v/unarchive.%v", c.url, projectIdOrName, c.format), nil)
+
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(bodyContent))
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
 
 	return err
 }

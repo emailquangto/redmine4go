@@ -85,4 +85,24 @@ func main() {
 			fmt.Printf("%s\n", error)
 		}
 	*/
+
+	/*
+		// unarchive a project
+		// using projectId as integer
+		error = c.UnarchiveProject(projectId)
+		if error == nil {
+			fmt.Printf("%s\n", "=====unarchive a project (using project Id)=====")
+			fmt.Printf("project %s is unarchived\n", projectId)
+		} else {
+			fmt.Printf("%s\n", error)
+		}
+		// using projectId as string of project name
+		error = c.UnarchiveProject(projectName)
+		if error == nil {
+			fmt.Printf("%s\n", "=====unarchive a project (using project name)=====")
+			fmt.Printf("project %s is unarchived\n", projectName)
+		} else {
+			fmt.Printf("%s\n", error)
+		}
+	*/
 }
