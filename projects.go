@@ -176,6 +176,30 @@ func (c *Client) UnarchiveProject(projectIdOrName interface{}) error {
 	return err
 }
 
+// DeleteProject() deletes the project of given id or identifier
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Deleting-a-project
+func (c *Client) DeleteProject(projectIdOrName interface{}) error {
+
+	// set up request
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%v/projects/%v.%v", c.url, projectIdOrName, c.format), nil)
+
+	if err != nil {
+		return err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return err
+}
+
 type ProjectList struct {
 	Projects   []Project `json:"projects"`
 	TotalCount int       `json:"total_count"`
