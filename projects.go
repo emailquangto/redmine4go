@@ -128,6 +128,39 @@ func (c *Client) CreateProject(projectNewWrapper ProjectToSendWrapper) (Project,
 	return projectWrapper.Project, err
 }
 
+// UpdateProject() updates a project with given parameters
+// from protocol scheme JSON
+// Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project
+func (c *Client) UpdateProject(projectIdOrName interface{}, projectWrapper ProjectWrapper) error {
+
+	// set up request
+	paras, err := json.Marshal(projectWrapper)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%v/projects/%v.%v", c.url, projectIdOrName, c.format), bytes.NewBuffer(paras))
+
+	if err != nil {
+		return err
+	}
+	// add headers to the request
+	req.Header.Add("Content-Type", "application/"+c.format)
+	req.Header.Add("X-Redmine-API-Key", c.key)
+	// send the request
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return err
+	}
+
+	return err
+}
+
 // ArchiveProject() archives the project of given id or identifier
 // from protocol scheme JSON
 // Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project
@@ -148,6 +181,11 @@ func (c *Client) ArchiveProject(projectIdOrName interface{}) error {
 		return err
 	}
 	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return err
+	}
 
 	return err
 }
@@ -173,6 +211,11 @@ func (c *Client) UnarchiveProject(projectIdOrName interface{}) error {
 	}
 	defer resp.Body.Close()
 
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return err
+	}
+
 	return err
 }
 
@@ -196,6 +239,11 @@ func (c *Client) DeleteProject(projectIdOrName interface{}) error {
 		return err
 	}
 	defer resp.Body.Close()
+
+	// return error if status code is not OK
+	if resp.StatusCode >= http.StatusBadRequest {
+		return err
+	}
 
 	return err
 }
