@@ -27,6 +27,8 @@ This library (in progress) supports most if not all of the `Redmine` REST calls.
 |             	    |          |- ArchiveProject()|Only available since Redmine 5.0|
 |             	    |          |- UnarchiveProject()|Only available since Redmine 5.0|
 |             	    |          |- DeleteProject() |	       	   |
+|Project Memberships           |       20%|				|	       	   |
+|		            |          |- GetProjectMemberships()|	       	   |
 
 ## Installation
 
